@@ -2,7 +2,7 @@
 """
     PlateTag 
 
-Abstract supertype for all PlateTag labels (eg, MicroTag, CryoTag, ConicalTag, etc.)
+Abstract supertype for all PlateTag labels (eg, MicroTag, CryoTag, BottleTag, etc.)
 """
 abstract type PlateTag end 
 
@@ -59,11 +59,11 @@ struct CryoTag <: PlateTag
             max_lines -=2
         end 
         if length(lines) > max_lines
-            throw(ArgumentError("CryoTags can have a maximum of $max_lines lines with these features"))
-        else
-            return new(lines,qr,date_field,font,fontsize)
-        end 
-    end 
+            @warn("CryoTags can have a maximum of $max_lines lines with these features")
+        end
+        
+        return new(lines[1:(min(length(lines),max_lines))],qr,date_field,font,fontsize)
+    end
 end 
 
 
@@ -93,10 +93,10 @@ struct BottleTag <: PlateTag
             max_lines -= 1 
         end 
         if length(lines) > max_lines
-            throw(ArgumentError("BottleTags can have a maximum of $max_lines lines with these features"))
-        else
-            return new(lines,qr,date_field,font,fontsize)
-        end 
+            @warn("BottleTags can have a maximum of $max_lines lines with these features")
+        end
+        
+        return new(lines[1:(min(length(lines),max_lines))],qr,date_field,font,fontsize)
     end 
 end 
     
