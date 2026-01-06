@@ -101,22 +101,22 @@ end
 
 
 function plot(tag::BottleTag)
-    wi = 1.5 + 0.75 + 0.05 # rect width, circle width , spacing buffer
-    hi = 0.75
+    wi = 2 + 1 + 0.125 # rect width, circle width , spacing buffer
+    hi = 1
     dpi = 600
     textsize= round(Int64,tag.fontsize * dpi /300)-1
     font = tag.font 
-    linemax = 14
+    linemax = 18
     lw = 0.1 # width of each line
     cir = 0 
-    rect = 0.8
-    qrcode_size=0.5
+    rect = 1.125
+    qrcode_size=0.6
     px = round(Int,wi *dpi)
     py = round(Int,hi *dpi)
     p = plot(size=(px,py), axis=nothing, showaxis=false,grid=false,legend=false, margin=(0,:mm)) 
     xlims!(0,wi)
     ylims!(0,hi)
-    l = hi 
+    l = hi -.125
     lines = tag.lines
 
     for line in lines 
@@ -124,17 +124,17 @@ function plot(tag::BottleTag)
         if length(lineplot) > linemax
         lineplot = string(lineplot[1:linemax-3],"...")
         end
-        annotate!(rect + qrcode_size +0.05 ,l,text(lineplot,textsize,font, :left,:top))
+        annotate!(0.125 ,l,text(lineplot,textsize,font, :left,:top))
         l -= lw 
     end 
     if tag.date_field
-        date_x = rect + qrcode_size
+        date_x = 0.125
         annotate!(date_x,0,text("__/__/__",textsize,font ,:left,:bottom))
     end  
    
     qr = qrcode(tag.qr)
-    plot_qr!(p,qr;ax=0.125,ay=0.125,px=qrcode_size)
-    plot_qr!(p,qr;ax=rect,ay=0.125,px=qrcode_size)
+    plot_qr!(p,qr;ax=wi-qrcode_size-0.2,ay=0.2,px=qrcode_size)
+    plot_qr!(p,qr;ax=2-qrcode_size,ay=0.2,px=qrcode_size)
 
     
 
