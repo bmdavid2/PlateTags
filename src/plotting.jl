@@ -129,12 +129,21 @@ function plot(tag::BottleTag)
     end 
     if tag.date_field
         date_x = 0.125
-        annotate!(date_x,0,text("__/__/__",textsize,font ,:left,:bottom))
+        annotate!(date_x,0.125,text("__/__/__",textsize,font ,:left,:bottom))
     end  
-   
+
     qr = qrcode(tag.qr)
-    plot_qr!(p,qr;ax=wi-qrcode_size-0.2,ay=0.2,px=qrcode_size)
-    plot_qr!(p,qr;ax=2-qrcode_size,ay=0.2,px=qrcode_size)
+    qr_match = qr_text_hash(tag.qr)
+    cir_code_x = wi-qrcode_size-0.2 
+    rect_code_x = 2-qrcode_size
+
+    hash_text_size = 15
+
+    annotate!(cir_code_x + qrcode_size/2,0.2, text(qr_match,hash_text_size,font,:center,:top))
+    annotate!(rect_code_x+  qrcode_size/2,0.2, text(qr_match,hash_text_size,font,:center,:top))
+    
+    plot_qr!(p,qr;ax=cir_code_x,ay=0.2,px=qrcode_size)
+    plot_qr!(p,qr;ax=rect_code_x  ,ay=0.2,px=qrcode_size)
 
     
 
@@ -143,5 +152,14 @@ end
 
 
 
+"""
+    qr_text_hash(code::QRCoders.QRCode;trunc::Integer=12,hypen_length=3) 
 
+Hash a qr code and trim it to `trunc`. Return a hyphenated string of the hash
+"""
+function qr_text_hash(code::QRCoders.QRCode;trunc::Integer=12,hypen_length=3) 
+    str = string(hash(tag.qr.message))[1:trunc]  # hash and truncate
+    splitstr = [str[i:(min(i+hypen_length-1,end))] for i in 1:hypen_length:(length(str))]
+    return join(splitstr,"-")
+end 
 
