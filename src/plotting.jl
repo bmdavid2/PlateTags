@@ -15,12 +15,12 @@ function plot_qr!(p,qr::BitMatrix;ax=0,ay=0,px=0.25)
 end 
 
 function plot(tag::MicroTag)
-    wi = 2 
+    wi = 1.5 
     hi = 0.25
     dpi = 600
     textsize= round(Int64,tag.fontsize * dpi /300)
     font = tag.font 
-    linemax = 28
+    linemax = 22
     if !isnothing(tag.qr) 
         linemax-= 4
     end 
@@ -64,7 +64,7 @@ function plot(tag::CryoTag)
     dpi = 600
     textsize= round(Int64,tag.fontsize * dpi /300)-1
     font = tag.font 
-    linemax = 22
+    linemax = 21
     lw = 0.1 # width of each line
 
     px = round(Int,wi *dpi)
@@ -80,18 +80,18 @@ function plot(tag::CryoTag)
         if length(lineplot) > linemax
         lineplot = string(lineplot[1:linemax-3],"...")
         end
-        annotate!(0,l,text(lineplot,textsize,font, :left,:top))
+        annotate!(0.05,l,text(lineplot,textsize,font, :left,:top))
         l -= lw 
     end 
     if tag.date_field
-        date_x = 0.3
+        date_x = 0.5
         annotate!(date_x,0,text("__/__/__",textsize,font ,:left,:bottom))
     end 
     if !isnothing(tag.qr) 
-            qrcode_size=0.25
+            qrcode_size=0.33
             qr = qrcode(tag.qr)
-            plot_qr!(p,qr)
-            plot_qr!(p,qr;ax=0.9,px=qrcode_size)
+            plot_qr!(p,qr,ax=0.05,px=qrcode_size)
+            plot_qr!(p,qr;ax=1,px=qrcode_size)
     end 
 
     

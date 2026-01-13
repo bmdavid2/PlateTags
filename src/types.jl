@@ -53,10 +53,10 @@ struct CryoTag <: PlateTag
         if  date_field # if either of these fields are present, then they take the place of the last line 
             max_lines -= 1 
             if !isnothing(qr)
-                max_lines -= 1 
+                max_lines -= 2 
             end
         elseif !isnothing(qr) 
-            max_lines -=2
+            max_lines -=3
         end 
         if length(lines) > max_lines
             @warn("CryoTags can have a maximum of $max_lines lines with these features")
