@@ -158,7 +158,7 @@ end
 Hash a qr code and trim it to `trunc`. Return a hyphenated string of the hash
 """
 function qr_text_hash(code::QRCoders.QRCode;trunc::Integer=12,hypen_length=3) 
-    str = string(hash(tag.qr.message))[1:trunc]  # hash and truncate
+    str = string(hash(code.message))[1:trunc]  # hash and truncate
     splitstr = [str[i:(min(i+hypen_length-1,end))] for i in 1:hypen_length:(length(str))]
     return join(splitstr,"-")
 end 
